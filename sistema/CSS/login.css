@@ -1,32 +1,27 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
 body{
-     background: url(../img/login-estilo.jpg);
-     background-color: black;
-     background-size: cover;
-     padding: auto;
-}
-
-
-@media (max-width: 700px) {
-  body{
-    background: url(../img/login-estilo.jpg); 
+     background: url(../img/fundo-login.jpg);
+     background-repeat: no-repeat; /* Impede a imagem de se repetir/clonar */
+      background-size: cover;       /* Faz a imagem esticar/encolher proporcionalmente para cobrir toda a área */
+      background-position: center center;  /* Mantém o foco da imagem sempre no centro */
+      background-attachment: fixed; /* Deixa a imagem fixa no fundo, evitando espaços brancos se a página rolar */
    
-    /*
-    ainda não tem a imagem tamanho 700px
-    */
-     
-  }
-  
-  
 }
 
-.container {
-    background-color: white; /* Garante o fundo branco */
-    border: 1px solid white;  /* Cria a borda branca grossa */
-    border-radius: 1px;      /* Arredonda levemente os cantos */
-    margin-top: 130px;
-    align-items: center;
-    width: 60%;
-    max-width: 570px;
+
+
+.caixa-login {
+   background-color: #ffffff;
+    padding: 30px 40px; 
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+    margin: 0 auto; 
+   
 }
 
 

@@ -156,16 +156,24 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                     <i class="fa fa-dashboard"></i> <span>Home</span>
                                 </a>
                             </li>
+                            <?php if ($nivel_usuario == 'administrador') {
+                            ?>
+                                <li class="treeview">
+                                    <a href="index.php?pag=barbeiros">
+                                        <i class="fa fa-scissors" aria-hidden="true"></i>
+                                        <span>Barbeiros</span>
+                                    </a>
+                                </li>
+
+                            <?php
+                            } ?>
+
+
                             <li class="treeview">
-                                <a href="#">
+                                <a href="index.php?pag=usuarios">
                                     <i class="fa fa-users" aria-hidden="true"></i>
-                                    <span>Barbeiros</span>
-                                    <i class="fa fa-angle-left pull-right"></i>
+                                    <span>Clientes</span>
                                 </a>
-                                <ul class="treeview-menu">
-                                    <li><a href="index.php?pag=usuarios"><i class="fa fa-angle-right"></i>usuarios</a></li>
-                                    <li><a href="index.php?pag=funcionarios"><i class="fa fa-angle-right"></i>funcionarios</a></li>
-                                </ul>
                             </li>
                             <li class="treeview">
                                 <a href="index.php?pag=agendamentos">
@@ -384,11 +392,17 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                     break;
 
                 case 'usuarios':
-                    require_once("paginas_adm/usuarios.php");
+                   require_once("paginas_adm/usuarios/usuarios.php");
                     break;
 
                 case 'agendamentos':
                     require_once("paginas_adm/agendamentos/agendamentos.php");
+                    break;
+
+
+
+                case 'barbeiros':
+                    require_once("paginas_adm/barbeiros/barbeiros.php");
                     break;
 
                 default:
