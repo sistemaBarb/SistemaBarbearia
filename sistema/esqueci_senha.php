@@ -8,7 +8,7 @@
 
 <body>
     <h1>Recuperar senha</h1>
-    <form action="processar_recuperacao.php" method="POST">
+    <form action="../public/index.php?acao=solicitar_recuperacao" method="POST">
         <label for="email">Digite seu e-mail cadastrado:</label><br>
         <input type="email" name="email" id="email" required>
         <br><br>

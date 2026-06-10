@@ -1,5 +1,8 @@
 <?php
-require_once('../conexao.php');
+if (@$_SESSION['nivel'] != 'administrador') {
+    echo "<script>window.location='index.php'</script>";
+    exit();
+}
 ?>
 
 <div class="container-fluid mt-4">
@@ -26,11 +29,9 @@ require_once('../conexao.php');
 
                     <body>
                         <?php
-                        $query = $pdo->query("SELECT * FROM usuarios WHERE nivel = 'cliente' ORDER BY nome ASC");
-                        $res = $query->fetchAll(PDO::FETCH_ASSOC);
-
-
-
+                        require_once __DIR__ . '/../../../../app/Controllers/UsuarioController.php';
+                        $controller = new UsuarioController();
+                        $res = $controller->listar();
                         if (count($res) > 0) {
                             foreach ($res as $row) {
                                 $nome = $row['nome'];
@@ -45,15 +46,14 @@ require_once('../conexao.php');
 
                                 echo "
                                 <tr>
-                                    <td><strong>{$nome}</strong></td>
-                                    <td>{$email}</td>
-                                    <td>{$cpf}</td>
-                                    <td class='text-center'>{$badge_status}</td>
-                                    <td class='text-center'>
-                                   <td class='text-center'>
-                                  <a href='#' class='btn btn-warning btn-sm mx-1' title='Editar' data-toggle='modal' data-target='#modalEditar' data-id='{$row['id']}' data-nome='{$nome}' data-email='{$email}' data-cpf='{$cpf}' data-ativo='{$ativo}' onclick='preencherModal(this)'>✏️</a>
-
-                                 <a href='paginas_adm/usuarios/excluir_usuario.php?id={$row['id']}' class='btn btn-danger btn-sm mx-1' title='Excluir' onclick=\"return confirm('Atenção: Tem certeza que deseja excluir o cliente {$nome}? Esta ação não pode ser desfeita.');\">🗑️</a>
+                                <td><strong>{$nome}</strong></td>
+                                <td>{$email}</td>
+                                <td>{$cpf}</td>
+                                <td class='text-center'>{$badge_status}</td>
+                                <td class='text-center'>
+                                 <a href='#' class='btn btn-warning btn-sm mx-1 text-white' title='Editar' data-toggle='modal' data-target='#modalEditar' data-id='{$row['id']}' data-nome='{$nome}' data-email='{$email}' data-cpf='{$cpf}' data-ativo='{$ativo}' onclick='preencherModal(this)'>Editar</a>
+        
+                                <a href='../../public/index.php?acao=excluir&id={$row['id']}' class='btn btn-danger btn-sm mx-1 text-white' title='Excluir' onclick=\"return confirm('Atenção: Tem certeza que deseja excluir o cliente {$nome}? Esta ação não pode ser desfeita.');\">Excluir</a>
                                 </td>
                                 </tr>
                                 ";
@@ -88,7 +88,7 @@ require_once('../conexao.php');
                 </button>
             </div>
 
-            <form action="paginas_adm/usuarios/editar_usuario.php" method="POST">
+            <form action="../../public/index.php?acao=editar" method="post">
                 <div class="modal-body p-4">
                     <input type="hidden" name="id" id="edit_id">
 

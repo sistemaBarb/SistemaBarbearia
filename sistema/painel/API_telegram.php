@@ -1,17 +1,11 @@
+
 <?php
-$token = "Substituido por segurança";
-$chat_id = "ID_Substituido por segurança";
+function enviarMensagemTelegram($texto_mensagem)
+{
+    $token = "8777438398:AAFjCN2sA6Rwg_A7COzuVFfC4fMZeUdCq-Y";
+    $chat_id = "8968719973";
+    $mensagem_url = urlencode($texto_mensagem);
+    $url = "https://api.telegram.org/bot{$token}/sendMessage?chat_id={$chat_id}&text={$mensagem_url}";
 
-$msg = "Conexao com sucesso !!!!!!!!!!!!!!!!";
-
-
-$mensagem_url = urlencode($msg);
-$url = "https://api.telegram.org/bot{$token}/sendMessage?chat_id={$chat_id}&text={$mensagem_url}";
-$resposta = @file_get_contents($url);
-
-
-if ($resposta) {
-    echo "<h1>sucesso</h1>";
-} else {
-    echo "<h1>Erro</h1>";
+    @file_get_contents($url);
 }

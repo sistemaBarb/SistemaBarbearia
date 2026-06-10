@@ -1,11 +1,11 @@
 <?php
 return [
     'host'        => 'smtp.gmail.com',
-    'username'    => 'Email já criado. mas substituido por segurança',
-    'password'    => 'senha já criado. mas substituido por segurança',
+    'username'    => 'barbearia15181@gmail.com',
+    'password'    => 'wudw qgrp ukrd nsuk',
     'port'        => 587,
     'encryption'  => 'tls',
-    'from_email'  => 'Email já criado. mas substituido por segurança',
+    'from_email'  => 'barbearia15181@gmail.com',
     'from_name'   => 'Barbearia Luiz',
     'app_url'     => 'http://localhost/barbearia'
 ];

@@ -1,11 +1,19 @@
 <?php
 @session_start();
-require_once("verificar.php");
-require_once("../conexao.php");
+
+
+if (!isset($_SESSION['id']) || $_SESSION['id'] == "") { //verifica se tem algum alguem ID já criado, se não joga para a tela de login
+    echo "<script>window.location='../index.php'</script>";
+    exit();
+}
+
+require_once '../../config/database.php';
+$database = new Database();
+$pdo = $database->getConnection();
 
 $id_usuario = $_SESSION['id'];
 
-$query = $pdo->query("SELECT * from usuarios where id ='$id_usuario'");
+$query = $pdo->query("SELECT * from usuarios where id ='$id_usuario'"); // verifica as informações criadas na tela de login no banco, paraa montar de acordo com quem acessou 
 $res = $query->fetchAll(PDO::FETCH_ASSOC);
 if (count($res) > 0) {
     $nome_usuario = $res[0]['nome'];
@@ -13,8 +21,7 @@ if (count($res) > 0) {
     $cpf_usuario = $res[0]['cpf'];
     $nivel_usuario = $res[0]['nivel'];
     $telefone_usuario = $res[0]['telefone'];
-    $endereco_usuario = $res[0]['endereco'];
-    $foto = $res[0]['foto'];
+    $foto = 'sem-foto.jpg';
 }
 $pag = 'home';
 if (@$_GET['pag'] == "") {
@@ -37,7 +44,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <html>
 
 <head>
-    <title><?php echo $nome_sistema; ?></title>
+    <title>Sistema Barbearia</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="Glance Design Dashboard Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
@@ -71,7 +78,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
     <script src="js/modernizr.custom.js"></script>
 
     <!--webfonts-->
-    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i&amp;subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i;subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
     <!--//webfonts-->
 
     <!-- chart -->
@@ -146,210 +153,60 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <h1><a class="navbar-brand" href="index.php"><span class="fa fa-area-chart"></span> Painel adm <span class="dashboard_text"><?php echo $nome_sistema; ?></span></a></h1>
+                        <h1>
+                            <a class="navbar-brand" href="index.php" style="font-size: 19px; white-space: nowrap;">
+                                PAINEL <?php echo ($_SESSION['nivel'] == 'administrador') ? 'ADM' : 'BARBEIRO'; ?>
+                                <span class="dashboard_text" style="font-size: 12px; margin-top: 2px;">Sistema Barbearia</span>
+                            </a>
+                        </h1>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="sidebar-menu">
                             <li class="header">Menu Navegação</li>
                             <li class="treeview">
                                 <a href="index.php">
-                                    <i class="fa fa-dashboard"></i> <span>Home</span>
+                                    </i> <span>Home</span>
                                 </a>
                             </li>
-                            <?php if ($nivel_usuario == 'administrador') {
-                            ?>
+
+                            <?php if ($nivel_usuario == 'administrador') { ?>
                                 <li class="treeview">
                                     <a href="index.php?pag=barbeiros">
-                                        <i class="fa fa-scissors" aria-hidden="true"></i>
-                                        <span>Barbeiros</span>
+                                        </i> <span>Barbeiros</span>
                                     </a>
                                 </li>
+                            <?php } ?>
 
-                            <?php
-                            } ?>
+                            <?php if ($nivel_usuario == 'administrador') { ?>
+                                <li class="treeview">
+                                    <a href="index.php?pag=usuarios">
+                                        </i> <span>Clientes</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
 
-
-                            <li class="treeview">
-                                <a href="index.php?pag=usuarios">
-                                    <i class="fa fa-users" aria-hidden="true"></i>
-                                    <span>Clientes</span>
-                                </a>
-                            </li>
                             <li class="treeview">
                                 <a href="index.php?pag=agendamentos">
-                                    <i class="fa fa-Calendar"></i> <span>Agendamentos</span>
-
+                                    </i> <span>Agendamentos</span>
                                 </a>
                             </li>
 
+                            <?php if ($nivel_usuario == 'administrador') { ?>
+                                <li class="treeview">
+                                    <a href="index.php?pag=servicos">
+                                        </i> <span>Serviços</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                     <!-- /.navbar-collapse -->
                 </nav>
             </aside>
         </div>
-        <!--left-fixed -navigation-->
 
-        <!---728x90--->
-        <!-- header-starts -->
         <div class="sticky-header header-section ">
-            <div class="header-left">
-                <!--toggle button start-->
-                <button id="showLeftPush"><i class="fa fa-bars"></i></button>
-                <!--toggle button end-->
-                <div class="profile_details_left"><!--notifications of menu start -->
-                    <ul class="nofitications-dropdown">
-                        <li class="dropdown head-dpdn">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-envelope"></i><span class="badge">4</span></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <div class="notification_header">
-                                        <h3>You have 3 new messages</h3>
-                                    </div>
-                                </li>
-                                <li><a href="#">
-                                        <div class="user_img"><img src="images/1.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet</p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li class="odd"><a href="#">
-                                        <div class="user_img"><img src="images/4.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet </p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li><a href="#">
-                                        <div class="user_img"><img src="images/3.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet </p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li><a href="#">
-                                        <div class="user_img"><img src="images/2.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet </p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li>
-                                    <div class="notification_bottom">
-                                        <a href="#">See all messages</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown head-dpdn">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">4</span></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <div class="notification_header">
-                                        <h3>You have 3 new notification</h3>
-                                    </div>
-                                </li>
-                                <li><a href="#">
-                                        <div class="user_img"><img src="images/4.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet</p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li class="odd"><a href="#">
-                                        <div class="user_img"><img src="images/1.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet </p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li><a href="#">
-                                        <div class="user_img"><img src="images/3.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet </p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li><a href="#">
-                                        <div class="user_img"><img src="images/2.jpg" alt=""></div>
-                                        <div class="notification_desc">
-                                            <p>Lorem ipsum dolor amet </p>
-                                            <p><span>1 hour ago</span></p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </a></li>
-                                <li>
-                                    <div class="notification_bottom">
-                                        <a href="#">See all notifications</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown head-dpdn">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-tasks"></i><span class="badge blue1">8</span></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <div class="notification_header">
-                                        <h3>You have 8 pending task</h3>
-                                    </div>
-                                </li>
-                                <li><a href="#">
-                                        <div class="task-info">
-                                            <span class="task-desc">Database update</span><span class="percentage">40%</span>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="progress progress-striped active">
-                                            <div class="bar yellow" style="width:40%;"></div>
-                                        </div>
-                                    </a></li>
-                                <li><a href="#">
-                                        <div class="task-info">
-                                            <span class="task-desc">Dashboard done</span><span class="percentage">90%</span>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="progress progress-striped active">
-                                            <div class="bar green" style="width:90%;"></div>
-                                        </div>
-                                    </a></li>
-                                <li><a href="#">
-                                        <div class="task-info">
-                                            <span class="task-desc">Mobile App</span><span class="percentage">33%</span>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="progress progress-striped active">
-                                            <div class="bar red" style="width: 33%;"></div>
-                                        </div>
-                                    </a></li>
-                                <li><a href="#">
-                                        <div class="task-info">
-                                            <span class="task-desc">Issues fixed</span><span class="percentage">80%</span>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="progress progress-striped active">
-                                            <div class="bar  blue" style="width: 80%;"></div>
-                                        </div>
-                                    </a></li>
-                                <li>
-                                    <div class="notification_bottom">
-                                        <a href="#">See all pending tasks</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <div class="clearfix"> </div>
-                </div>
-                <!--notification menu end -->
-                <div class="clearfix"> </div>
-            </div>
+
             <div class="header-right">
 
 
@@ -364,15 +221,13 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                         <p><?php echo $nome_usuario ?></p>
                                         <span><?php echo $nivel_usuario ?></span>
                                     </div>
-                                    <i class="fa fa-angle-down lnr"></i>
-                                    <i class="fa fa-angle-up lnr"></i>
+                                    <span style="margin-left: 8px; margin-top: 5px; font-size: 40px; color: #999;"></span>
                                     <div class="clearfix"></div>
                                 </div>
                             </a>
                             <ul class="dropdown-menu drp-mnu">
-                                <li> <a href="#"><i class="fa fa-cog"></i> Configurações </a> </li>
-                                <li> <a href="#"><i class="fa fa-suitcase"></i> Editar Perfil</a> </li>
-                                <li> <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a> </li>
+                                <li><a href="#" data-toggle="modal" data-target="#modalPerfil"><span style="margin-right: 8px;"></span> Editar Perfil</a></li>
+                                <li><a href="logout.php"><span style="margin-right: 8px;"></span> Logout</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -381,6 +236,14 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
             </div>
             <div class="clearfix"> </div>
         </div>
+
+
+
+
+
+
+
+
         <!-- //header-ends -->
         <!---728x90--->
         <!-- main content start-->
@@ -392,7 +255,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                     break;
 
                 case 'usuarios':
-                   require_once("paginas_adm/usuarios/usuarios.php");
+                    require_once("paginas_adm/usuarios/usuarios.php");
                     break;
 
                 case 'agendamentos':
@@ -403,6 +266,11 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
                 case 'barbeiros':
                     require_once("paginas_adm/barbeiros/barbeiros.php");
+                    break;
+
+
+                case 'servicos':
+                    require_once("paginas_adm/servicos/servicos.php");
                     break;
 
                 default:
@@ -419,7 +287,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
         <!--footer-->
         <div class="footer">
-            <p>&copy; 2018 Glance Design Dashboard. All Rights Reserved | Design by <a href="https://w3layouts.com/" target="_blank">w3layouts</a></p>
+
+            <p class="mb-0">© 2026 Barbearia do Luiz</p>
+            <p>Desenvolvido para demonstração de PFC</p>
+
         </div>
         <!--//footer-->
     </div>
@@ -585,6 +456,44 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.js"> </script>
     <!-- //Bootstrap Core JavaScript -->
+
+    <div class="modal fade" id="modalPerfil" tabindex="-1" role="dialog" aria-labelledby="modalPerfilLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-dark text-white">
+                    <h4 class="modal-title font-weight-bold" id="modalPerfilLabel">Editar Meu Perfil</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="margin-top: -20px;">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+
+                <form method="POST" action="editar_adm.php">
+                    <div class="modal-body p-4">
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">Nome</label>
+                            <input type="text" class="form-control" name="nome" value="<?php echo @$nome_usuario; ?>" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">E-mail</label>
+                            <input type="email" class="form-control" name="email" value="<?php echo @$_SESSION['email']; ?>" placeholder="Seu e-mail">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold">Nova Senha</label>
+                            <input type="password" class="form-control" name="senha" placeholder="Caso queira mantar a senha que já utilize é so não inserir nada ">
+                            <small class="text-muted">Apenas preencha se desejar alterar a sua senha de acesso.</small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary shadow-sm" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary shadow-sm">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </body>
 

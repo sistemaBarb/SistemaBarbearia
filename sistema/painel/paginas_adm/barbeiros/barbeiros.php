@@ -16,7 +16,7 @@ if ($nivel_usuario != 'administrador') {
     <div class="row mb-3">
         <div class="col-md-12">
             <button type="button" class="btn btn-primary btn-flat btn-pri" data-toggle="modal" data-target="#modalCadastrarBarbeiro">
-                + Novo Barbeiro
+                Novo Barbeiro
             </button>
         </div>
     </div>
@@ -39,15 +39,17 @@ if ($nivel_usuario != 'administrador') {
 
 
 
-                    $query = $pdo->query("SELECT * FROM usuarios WHERE nivel = 'barbeiro' ORDER BY id DESC"); //busca os barbeiros
-                    $res = $query->fetchAll(PDO::FETCH_ASSOC);
-                    $total_reg = count($res);
+                    // Chama o Controlador
+                    require_once __DIR__ . '/../../../../app/Controllers/BarbeiroController.php';
+                    $controller = new BarbeiroController();
+
+                    // Recebe a lista de barbeiros pronta
+                    $res = $controller->listar();
+
+                    if (count($res) > 0) {
 
 
-                    if ($total_reg > 0) {
-
-
-                        for ($i = 0; $i < $total_reg; $i++) { //cria a linha na tabela de bd 
+                        for ($i = 0; $i < count($res); $i++) { //cria a linha na tabela de bd 
                             $id = $res[$i]['id'];
                             $nome = $res[$i]['nome'];
                             $email = $res[$i]['email'];
@@ -59,12 +61,11 @@ if ($nivel_usuario != 'administrador') {
                             echo "<td>{$email}</td>";
                             echo "<td>{$cpf}</td>";
                             echo "<td>{$telefone}</td>";
-                            echo "
-                        <td>
-                        <a href='#' class='text-primary' title='Editar' onclick='editar({$id}, \"{$nome}\", \"{$email}\", \"{$cpf}\", \"{$telefone}\")'><i class='fa fa-edit'></i></a>
-                        <a href='#' class='text-danger ml-2' title='Excluir' onclick='excluir({$id})'><i class='fa fa-trash'></i></a>
-                        </td>";
-
+                            echo "<td>{$telefone}</td>";
+                            echo "<td>";
+                            echo "<a href='#' class='btn btn-warning btn-sm text-white' title='Editar' onclick='editar({$id}, \"{$nome}\", \"{$email}\", \"{$cpf}\", \"{$telefone}\")'>Editar</a>";
+                            echo "<a href='../../public/index.php?acao=excluir_barbeiro&id={$id}' class='btn btn-danger btn-sm text-white ml-2' title='Excluir' onclick=\"return confirm('Atenção: Deseja excluir o barbeiro {$nome}?');\">Excluir</a>";
+                            echo "</td>";
                             echo "</tr>";
                         }
                     } else { //se não tiver nenhum barbeiro
@@ -86,7 +87,7 @@ if ($nivel_usuario != 'administrador') {
                     </button>
                     <h4 class="modal-title">Cadastrar novo Barbeiro</h4>
                 </div>
-                <form id="form-barbeiro">
+                <form action="../../public/index.php?acao=cadastrar_barbeiro" method="post">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>nome do Barbeiro</label>
@@ -109,13 +110,13 @@ if ($nivel_usuario != 'administrador') {
                         </div>
 
                         <div class="form-group">
-                            <label>senha</label>
-                            <input type="password" id="senha" name="senha" class="form-control" minlength="8" required>
+                            <label>Senha</label>
+                            <input type="password" name="senha" id="senha" class="form-control" required>
                         </div>
 
                         <div class="form-group">
-                            <label>confirmar Senha</label>
-                            <input type="password" id="confirma_senha" class="form-control" minlength="8" required>
+                            <label>Confirmar Senha</label>
+                            <input type="password" name="confirma_senha" id="confirma_senha" class="form-control" required>
                         </div>
 
                         <div textalign="center" id="mensagem-cadastro" class=""></div>
@@ -138,7 +139,7 @@ if ($nivel_usuario != 'administrador') {
                     </button>
                     <h4 class="modal-title">Editar Barbeiro</h4>
                 </div>
-                <form id="form-editar-barbeiro">
+                <form action="../../public/index.php?acao=editar_barbeiro" method="post">
                     <div class="modal-body">
                         <input type="hidden" id="id_editar" name="id">
 

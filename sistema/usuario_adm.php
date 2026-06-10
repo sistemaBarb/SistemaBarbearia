@@ -1,26 +1,43 @@
-<?php
-require_once("conexao.php");
+<?php //Pagina para sempre ter um usuario adm criado no banco de dados
+require_once '../config/database.php';
+$database = new Database();
+$pdo = $database->getConnection();
+
 try {
-    $senha = "12345678";
-    $senha_crip = password_hash($senha, PASSWORD_DEFAULT);
+    $verifica_admin = $pdo->query("SELECT id FROM usuarios WHERE nivel = 'administrador'");
 
-    $query = $pdo->query("SELECT * from usuarios where nivel ='administrador'");
-    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+    if ($verifica_admin->rowCount() == 0) {
 
-    if (count($res) == 0) {
-        $sql = "INSERT INTO usuarios SET nome='luiz', email='$email_sistema', cpf='00000000000',senha_cr=:senha, nivel= 'administrador', data_cadastro= curDate(), ativo='sim', foto='sem-foto.jpg', telefone='', endereco='', email_verificado='1'";
+        // Dados padrão do Administrador Mestre
+        $nome_admin  = 'luiz';
+        $email_admin = 'barbearialuiz1@outlook.com';
+        $cpf_admin   = '00000000000';
+        $senha_texto = '12345678';
+        $senha_hash  = password_hash($senha_texto, PASSWORD_DEFAULT); // Criptografia segura PDO
+        $nivel_admin = 'administrador';
+        $ativo_admin = 'sim';
+        $data_hoje   = date('Y-m-d');
 
-        $cripto = $pdo->prepare($sql);
 
-        $cripto->execute([
-            ':senha' => $senha_crip
-        ]);
-        echo "usuário adm foi criado com sucesso";
-        echo "<hr><a href='index.php'>voltar para o Login</a>";
+        $sql = "INSERT INTO usuarios (nome, email, cpf, senha_cr, nivel, ativo, data_cadastro) 
+                       VALUES (:nome, :email, :cpf, :senha, :nivel, :ativo, :data)";
+
+        $inserir_admin = $pdo->prepare($sql);
+        $inserir_admin->bindParam(':nome', $nome_admin);
+        $inserir_admin->bindParam(':email', $email_admin);
+        $inserir_admin->bindParam(':cpf', $cpf_admin);
+        $inserir_admin->bindParam(':senha', $senha_hash);
+        $inserir_admin->bindParam(':nivel', $nivel_admin);
+        $inserir_admin->bindParam(':ativo', $ativo_admin);
+        $inserir_admin->bindParam(':data', $data_hoje);
+        $inserir_admin->execute();
+
+        echo " O usuário Administrador Master foi criado!";
+        echo "<hr><a href='index.php'>Voltar para o Login</a>";
     } else {
-        echo "já existe um usuario adm criado.";
-        echo "<hr><a href='index.php'>voltar para o Login</a>";
+        echo "já possui um usuário administrador ativo</p>";
+        echo "<hr><a href='index.php'>Voltar para o Login</a>";
     }
-} catch (PDOException $erro) {
-    echo "Erro ao configurar: " . $erro->getMessage();
+} catch (PDOException $e) {
+    echo "<pErro ao semear o banco de dados:" . $e->getMessage() . "</p>";
 }

@@ -1,24 +1,12 @@
 <?php
-require_once 'conexao.php';
-
 $token = $_GET['token'] ?? '';
 
-if (empty($token)) { // Verifica se o token é válido, não foi usado e não expirou
-    die('Token não informado.');
-}
-
-
-$stmt = $pdo->prepare(
-    "SELECT email FROM reset_senha
-     WHERE token = :token AND usado = 0 AND validade > NOW()" //now() serve para o banco capturar a data e hora da geração do token
-);
-$stmt->execute([':token' => $token]);
-$registro = $stmt->fetch();
-
-if (!$registro) {
-    die('Link inválido ou expirado. Solicite uma nova recuperação.');
+if (empty($token)) {
+    echo "<script>window.alert('Link de recuperação inválido'); window.location='index.php';</script>";
+    exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -29,7 +17,7 @@ if (!$registro) {
 
 <body>
     <h1>Sua nova senha</h1>
-    <form action="nova_senha.php" method="POST">
+    <form action="../public/index.php?acao=redefinir_senha" method="POST">
         <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">
 
         <label for="senha">Nova senha (minimo 8 caracteres):</label><br>

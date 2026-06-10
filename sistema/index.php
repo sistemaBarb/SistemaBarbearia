@@ -1,8 +1,4 @@
-<?php
-require_once("conexao.php");
-
-
-?>
+=
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -10,7 +6,7 @@ require_once("conexao.php");
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $nome_sistema; ?></title>
+    <title>Sistema Barbearia</title>
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
@@ -33,9 +29,9 @@ require_once("conexao.php");
             <div class=" col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" style="opacity:0.8" sytle="border-radius:20px">
                 <div class="caixa-login">
 
-                    <form role="form" action="autenticar.php" method="post">
+                    <form action="../public/index.php?acao=logar" method="post">
                         <fieldset>
-                            <h2>Please Sign In</h2>
+                            <h2>Faça seu Login</h2>
                             <hr class="colorgraph">
                             <?php
                             if (isset($_GET['erro'])) {
@@ -127,7 +123,7 @@ require_once("conexao.php");
 
 <script type="text/javascript">
     $("#recuperar-senha").submit(function(event) {
-        event.preventDefault(); // Impede a página de recarregar (O modal não vai mais fechar sozinho)
+        event.preventDefault(); // Impede a página de recarregar 
 
         let botao = $(this).find('button[type="submit"]');
         let textoOriginal = botao.text();
@@ -146,10 +142,13 @@ require_once("conexao.php");
 
                 if (mensagem.trim() == "Recuperado com Sucesso") {
                     $('#email-rec').val('');
+
                     $('#msg-recuperar').addClass('text-success');
+
                     $('#msg-recuperar').text('Sua senha foi enviada para seu e-mail!');
                 } else {
                     $('#msg-recuperar').addClass('text-danger');
+
                     $('#msg-recuperar').text(mensagem);
                 }
             },
