@@ -9,10 +9,11 @@ try {
     if ($verifica_admin->rowCount() == 0) {
 
         // Dados padrão do Administrador Mestre
-        $nome_admin  = 'luiz';
-        $email_admin = 'barbearialuiz1@outlook.com';
-        $cpf_admin   = '00000000000';
-        $senha_texto = '12345678';
+        $nome_admin  = $_ENV['ADMIN_NOME'];
+        $email_admin = $_ENV['ADMIN_EMAIL'];
+        $cpf_admin   = $_ENV['ADMIN_CPF'];
+        $senha_texto = $_ENV['ADMIN_PASS'];
+        $senha_hash = password_hash($senha_texto, PASSWORD_DEFAULT); // Criptografia segura PDO
         $senha_hash  = password_hash($senha_texto, PASSWORD_DEFAULT); // Criptografia segura PDO
         $nivel_admin = 'administrador';
         $ativo_admin = 'sim';

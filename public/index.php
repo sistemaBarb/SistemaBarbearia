@@ -1,6 +1,10 @@
 <?php
 session_start();
 $acao = isset($_GET['acao']) ? $_GET['acao'] : 'login';
+require_once __DIR__ . '/../vendor/autoload.php'; // Carrega o autoloader do Composer
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../'); //le o arquivo .env para tirar as credenciais do código para variáveis de ambiente
+$dotenv->load();
 
 switch ($acao) {
 

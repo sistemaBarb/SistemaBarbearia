@@ -1,12 +1,11 @@
 <?php
 return [
-    'host'        => 'smtp.gmail.com',
-    'username'    => 'barbearia15181@gmail.com',
-    'password'    => 'wudw qgrp ukrd nsuk',
-    'port'        => 587,
-    'encryption'  => 'tls',
-    'from_email'  => 'barbearia15181@gmail.com',
-    'from_name'   => 'Barbearia Luiz',
-    'app_url'     => 'http://localhost/barbearia'
+    'host'       => 'smtp.gmail.com',
+    'username'   => $_ENV['SMTP_USER'],
+    'password'   => $_ENV['SMTP_PASS'],
+    'port'       => 587,
+    'encryption' => 'tls',
+    'from_email' => $_ENV['SMTP_USER'],
+    'from_name'  => 'Barbearia Luiz',
+    'app_url'    => 'http://localhost/barbearia'
 ];
-//lembrar de dar git.ignore por conta das info 
