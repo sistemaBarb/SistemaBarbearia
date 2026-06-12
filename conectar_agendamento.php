@@ -35,15 +35,26 @@ $observacao = "Tel do Cliente: " . $telefone . " Agendado pelo Site";
 
 
 
-if ($agendamento->verificarHorarioOcupado($funcionario, $data, $hora)) { //chama a função para não sobreescever o horario 
-    echo "<script>alert('Horário indisponível! Este barbeiro já tem um cliente marcado nesta data e hora.'); window.history.back();</script>";
+$queryServico = "SELECT tempo FROM servicos WHERE id = :id_servico"; // busca a duração do serviço
+$Servico = $db->prepare($queryServico);
+$Servico->bindParam(':id_servico', $servicos);
+$Servico->execute();
+$dadosServico = $Servico->fetch(PDO::FETCH_ASSOC);
+
+$duracaoMinutos = $dadosServico ? $dadosServico['tempo'] : 30; // 30 min por padrão se não achar
+
+//Calcula a hora do fim com base no tempo real
+$hora_fim = date('H:i:s', strtotime("+$duracaoMinutos minutes", strtotime($hora)));
+
+if ($agendamento->verificarHorarioOcupado($funcionario, $data, $hora, $hora_fim, $duracaoMinutos)) {
+    echo "<script>alert('Horário indisponível, este barbeiro já tem um cliente marcado neste período.'); window.history.back();</script>";
     exit();
 }
 $resultado = $agendamento->cadastrarAgendamento($cliente, $funcionario, $servicos, $data, $hora, $observacao); //cadastra no bd
 
 if ($resultado) { //func do telegram
     $data_formatada = date('d/m/Y', strtotime($data));
-    $msgTelegram = "💈 NOVO AGENDAMENTO PELO SITE!\n\nCliente: $cliente\nData: $data_formatada\nHora: $hora\nObservação: $observacao";
+    $msgTelegram = " NOVO AGENDAMENTO PELO SITE!\n\nCliente: $cliente\nData: $data_formatada\nHora: $hora\nObservação: $observacao";
     enviarMensagemTelegram($msgTelegram); // Dispara a notificação para o numero
 
 
