@@ -106,29 +106,29 @@
             <div class="modal-body" style="max-height: 400px; overflow-y: auto; text-align: justify; color: #555;">
                 <p>Esta Política de Privacidade explica como a Barbearia coleta, usa, armazena e protege os seus dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).</p>
 
-                <h5><strong>Quais dados coletamos?</strong></h5>
-                <p>Coletamos apenas os dados necessários para a sua identificação e contato:</p>
+                <h5><strong>. Agentes de Tratamento e DPO</strong></h5>
+                <p>A Barbearia atua como Controladora dos dados. O gestor do estabelecimento é o Encarregado de Proteção de Dados (DPO), responsável por atender às suas solicitações referentes à privacidade.</p>
+
+                <h5><strong>. Quais dados coletamos e para quê?</strong></h5>
+                <p>Coletamos estritamente o necessário para a prestação do serviço:</p>
                 <ul>
-                    <li><strong>Dados de Cadastro:</strong> Nome completo, CPF e E-mail.</li>
-                    <li><strong>Dados de Acesso:</strong> Senha de acesso (armazenada de forma irreversível e criptografada).</li>
+                    <li><strong>Dados de Cadastro:</strong> Nome completo, CPF e E-mail (para identificação e agendamentos).</li>
+                    <li><strong>Dados de Acesso:</strong> Senha criptografada de forma irreversível.</li>
                 </ul>
 
-                <h5><strong>Para que utilizamos os seus dados?</strong></h5>
-                <p>Os dados coletados possuem essas finalidades:</p>
+                <h5><strong>. Retenção e Anonimização</strong></h5>
+                <p>Seus dados permanecem ativos enquanto houver vínculo com a barbearia. Após 5 anos de inatividade, executamos a <strong>anonimização</strong> irreversível do seu cadastro, transformando as informações pessoais em dados estatísticos genéricos, garantindo sua total privacidade a longo prazo.</p>
+
+                <h5><strong>. Compartilhamento e Segurança</strong></h5>
+                <p>A Barbearia <strong>não vende, aluga ou compartilha</strong> seus dados com terceiros. Adotamos medidas rigorosas de segurança técnica, e nem mesmo os administradores do sistema têm acesso à sua senha original.</p>
+
+                <h5><strong>. Quais são os seus direitos?</strong></h5>
+                <p>De acordo com o Art. 18 da LGPD, você possui o direito de:</p>
                 <ul>
-                    <li><strong>Identificação:</strong> Criar e gerenciar a sua conta de usuário no sistema.</li>
-                    <li><strong>Agendamentos:</strong> Vincular os horários e serviços escolhidos ao seu perfil.</li>
-                    <li><strong>Comunicação:</strong> Enviar e-mails transacionais (como validação de conta e recuperação de senha).</li>
+                    <li>Confirmar a existência de tratamento dos seus dados;</li>
+                    <li>Solicitar a correção de dados incompletos ou desatualizados;</li>
+                    <li>Solicitar a exclusão definitiva (direito ao esquecimento) da sua conta e dos seus dados do nosso banco.</li>
                 </ul>
-
-                <h5><strong>Como protegemos as suas informações?</strong></h5>
-                <p>Adotamos medidas de segurança técnicas e administrativas para proteger seus dados. Reforçamos que sua senha é salva no banco de dados utilizando de algoritmos que criptografam seus dados sensiveis, o que significa que nem mesmo os administradores do sistema têm acesso à sua senha original.</p>
-
-                <h5><strong>Compartilhamento de Dados</strong></h5>
-                <p>O Sistema da nossa Barbearia <strong>não vende, aluga ou compartilha</strong> seus dados pessoais com terceiros. As suas informações são de uso exclusivo para a gestão interna da barbearia.</p>
-
-                <h5><strong>Quais são os seus direitos?</strong></h5>
-                <p>De acordo com o Art. 18 da LGPD, você tem o direito de solicitar o acesso, a correção de dados incompletos ou a exclusão definitiva da sua conta e dos seus dados pessoais do nosso banco de dados a qualquer momento</p>
             </div>
 
             <div class="modal-footer">

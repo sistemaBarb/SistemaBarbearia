@@ -2,21 +2,21 @@
 
 class PagamentoController
 {
-    // Token de acesso (Chave mestra de conexão com o Mercado Pago)
-    private $tokenMercadoPago = 'APP_USR-5589235026089854-060616-02fd71e2fdd721d8b4566807cd2be157-3456266690';
+    private $tokenMercadoPago;
+    public function __construct()
+    {
+        $this->tokenMercadoPago = $_ENV['MERCADO_PAGO_TOKEN']; //Token escondido com .env
+    }
 
     public function gerarLinkPagamento()
     {
-        // Garante que a requisição veio de um formulário POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: ../sistema/painel/index.php");
             exit;
         }
 
-
         $idAgendamento = $_POST['id_agendamento'];
-        $valorServico  = (float) $_POST['valor_servico'];
-
+        $valorServico = (float) $_POST['valor_servico'];
 
         $dadosFatura = [ //preparação dos dados 
             "items" => [
@@ -31,9 +31,9 @@ class PagamentoController
             "external_reference" => $idAgendamento,
 
             "back_urls" => [
-                "success" => "https://localhost/barbearia/sistema/painel/index.php?pag=agendamentos",
-                "failure" => "https://localhost/barbearia/sistema/painel/index.php?pag=agendamentos",
-                "pending" => "https://localhost/barbearia/sistema/painel/index.php?pag=agendamentos"
+                "success" => "https://barbearialuiz.site.je/sistema/painel/index.php?pag=agendamentos",
+                "failure" => "https://barbearialuiz.site.je/sistema/painel/index.php?pag=agendamentos",
+                "pending" => "https://barbearialuiz.site.je/sistema/painel/index.php?pag=agendamentos"
             ],
             "auto_return" => "approved" // Retorna ao sistema sozinho se o pagamento for aprovado
         ];

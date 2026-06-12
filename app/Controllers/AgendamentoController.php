@@ -48,30 +48,18 @@ class AgendamentoController
             $db = $database->getConnection();
             $agendamento = new Agendamento($db);
 
+            $queryServico = "SELECT tempo FROM servicos WHERE id = :id_servico"; //Busca a duração tempo do serviço selecionado no banco
+            $retServico = $db->prepare($queryServico);
+            $retServico->bindParam(':id_servico', $servicos); // $servicos guarda o ID do serviço do POST
+            $retServico->execute();
+            $dadosServico = $retServico->fetch(PDO::FETCH_ASSOC);
 
-            if ($agendamento->verificarHorarioOcupado($funcionario, $data, $hora, $id)) {
-                echo "<script>window.alert('horário indisponível Este barbeiro já tem um cliente marcado nesta data e hora'); window.history.back();</script>";
+            $duracao = $dadosServico ? $dadosServico['tempo'] : 40; // Se não achar assume que é 40 minutos
+            $hora_fim = date('H:i:s', strtotime("+$duracao minutes", strtotime($hora))); //Calcula a hora do fim do novo agendamento com base no tempo real
+
+            if ($agendamento->verificarHorarioOcupado($funcionario, $data, $hora, $hora_fim, $duracao, $id)) { //envia pra modal
+                echo "<script>window.alert('Horário indisponível! O serviço escolhido entra em conflito com a agenda do barbeiro.'); window.history.back();</script>";
                 return;
-            }
-
-
-            if (empty($id)) {
-                $resultado = $agendamento->cadastrarAgendamento($cliente, $funcionario, $servicos, $data, $hora, $observacao);
-                $mensagem = 'agendamento salvo com sucesso!';
-            } else {
-                $resultado = $agendamento->EditarAgendamento($id, $cliente, $funcionario, $servicos, $data, $hora, $observacao);
-                $mensagem = 'agendamento editado';
-            }
-
-            if ($resultado) {
-                require_once __DIR__ . '/../../sistema/painel/API_telegram.php';
-                $data_formatada = date('d/m/Y', strtotime($data)); //formata a data para padrão no brasil 
-                $msgTelegram = "Seu agendamento está marcado para:\nData: {$data_formatada}\nHora: {$hora}\n\nte esperamos na barbearia!";
-                enviarMensagemTelegram($msgTelegram);
-                echo "<script>window.alert('$mensagem'); window.location='../sistema/painel/index.php?pag=agendamentos';</script>";
-            } else {
-
-                echo "<script>window.alert('Erro ao salvar o agendamento'); window.location='../sistema/painel/index.php?pag=agendamentos';</script>";
             }
         }
     }

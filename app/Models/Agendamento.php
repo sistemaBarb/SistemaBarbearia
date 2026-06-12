@@ -101,20 +101,25 @@ class Agendamento
         return $ret->execute();
     }
 
-    public function verificarHorarioOcupado($funcionario, $data, $hora, $id = null)
+    public function verificarHorarioOcupado($funcionario, $data, $hora_inicio, $hora_fim, $duracaoMinutos, $id = null) // A lógica = A hora final do agendamento existente for maior que a hora inicial do novo, e a hora inicial do agendamento existente for MENOR que a hora final do novo
     {
-        $query = "SELECT id FROM " . $this->table_name . " WHERE funcionario = :funcionario AND data = :data AND hora = :hora";
+        $query = "SELECT a.id 
+                  FROM " . $this->table_name . " AS a
+                  INNER JOIN servicos AS s ON a.servicos = s.id
+                  WHERE a.funcionario = :funcionario 
+                  AND a.data = :data 
+                  AND (a.hora < :hora_fim AND ADDTIME(a.hora, SEC_TO_TIME(s.tempo * 60)) > :hora_inicio)";
 
-        //vai ignorar o ID, pois já esta editando 
         if (!empty($id)) {
-            $query .= " AND id != :id";
+            $query .= " AND a.id != :id";
         }
 
         $ret = $this->conex->prepare($query);
 
         $ret->bindParam(':funcionario', $funcionario);
         $ret->bindParam(':data', $data);
-        $ret->bindParam(':hora', $hora);
+        $ret->bindParam(':hora_inicio', $hora_inicio);
+        $ret->bindParam(':hora_fim', $hora_fim);
 
         if (!empty($id)) {
             $ret->bindParam(':id', $id);
@@ -122,7 +127,6 @@ class Agendamento
 
         $ret->execute();
 
-        // Se encontrar alguma linha, retorna está ocupado
         return $ret->rowCount() > 0;
     }
 
