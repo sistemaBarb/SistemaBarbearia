@@ -7,5 +7,5 @@ return [
     'encryption' => 'tls',
     'from_email' => $_ENV['SMTP_USER'],
     'from_name'  => 'Barbearia Luiz',
-    'app_url'    => 'http://localhost/barbearia'
+    'app_url'    => 'https://barbearialuiz.site.je/sistema/index.php'
 ];
