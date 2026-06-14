@@ -102,7 +102,9 @@ if (@$_SESSION['nivel'] != 'administrador') {
                                   <td>{$cpf_tela}</td>
                                  <td>{$telefone_tela}</td> <td class='text-center'>{$badge_status}</td>
                                   <td class='text-center'>
-                                  <a href='#' class='btn btn-warning btn-sm mx-1 text-white' title='Editar' data-toggle='modal' data-target='#modalEditar' data-id='{$row['id']}' data-nome='{$nome}' data-email='        {$email_real}' data-cpf='{$cpf_real}' data-telefone='{$telefone_real}' data-ativo='{$ativo}' onclick='preencherModal(this)'>Editar</a>
+                                  <a href='#' class='btn btn-warning btn-sm mx-1 text-white' title='Editar' data-toggle='modal' data-target='#modalEditar' data-id='{$row['id']}' data-nome='{$nome}' data-email='       {$email_real}' data-cpf='{$cpf_real}' data-telefone='{$telefone_real}' data-ativo='{$ativo}' onclick='preencherModal(this)'>Editar</a>
+
+                                  <a href='../../public/index.php?acao=visualizar_dados&id={$row['id']}' class='btn btn-info btn-sm mx-1 text-white' title='ver Dados'> Ver Dados </a>
 
                                 <a href='../../public/index.php?acao=excluir&id={$row['id']}' class='btn btn-danger btn-sm mx-1 text-white' title='Excluir' onclick=\"return confirm('Atenção: Tem certeza que deseja excluir o cliente {$nome}? Esta ação não pode ser desfeita.');\">Excluir</a>
                                  </td>

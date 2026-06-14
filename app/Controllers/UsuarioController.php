@@ -40,7 +40,6 @@ class UsuarioController
                 require_once __DIR__ . '/../../sistema/EmailService.php';
                 $emailService = new EmailService();
 
-                // 2. Montamos o link mágico
                 //subistituir pelo nome da hospedagem dps 
                 $link = "http://localhost/barbearia/sistema/verifica_email.php?token=" . $token;
 
@@ -87,16 +86,15 @@ class UsuarioController
                 echo "<script>window.alert('o administrador principal não pode ser excluído'); window.location='../sistema/painel/index.php?pag=usuarios';</script>";
                 exit();
             }
-            // --------------------------
 
             $database = new Database();
             $db = $database->getConnection();
             $usuarioDB = new Usuario($db);
 
             if ($usuarioDB->excluirUsuario($id)) {
-                echo "<script>window.alert('Excluído com sucesso!'); window.location='../sistema/painel/index.php?pag=usuarios';</script>";
+                echo "<script>window.alert('Desativado com sucesso!'); window.location='../sistema/painel/index.php?pag=usuarios';</script>";
             } else {
-                echo "<script>window.alert('Erro ao excluir!'); window.location='../sistema/painel/index.php?pag=usuarios';</script>";
+                echo "<script>window.alert('Erro ao desativar!'); window.location='../sistema/painel/index.php?pag=usuarios';</script>";
             }
         } else {
             echo "<script>window.location='../sistema/painel/index.php?pag=usuarios';</script>";
@@ -215,5 +213,29 @@ class UsuarioController
             }
         }
         return true;
+    }
+    public function visualizarDados()
+    {
+        if (isset($_GET['id'])) {
+            $cliente_id = $_GET['id'];
+
+            @session_start();
+            $admin_id = $_SESSION['id'];
+
+            $database = new Database();
+            $db = $database->getConnection();
+            $usuario = new Usuario($db);
+
+            $usuario->registrarLogAcesso($admin_id, $cliente_id);
+            $dadosCliente = $usuario->buscarPorId($cliente_id);
+            $telefone = $dadosCliente['telefone'];
+            $cpf = $dadosCliente['cpf'];
+            $email = $dadosCliente['email'];
+
+            echo "<script>
+                window.alert('DADOS SENSÍVEIS (Acesso Registrado no Log)\\n\\nTelefone: {$telefone}\\nCPF: {$cpf}\\nE-mail: {$email}\\n\\n Este acesso foi gravado.');
+                window.location='../sistema/painel/index.php?pag=usuarios';
+            </script>";
+        }
     }
 }

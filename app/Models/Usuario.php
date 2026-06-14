@@ -94,7 +94,7 @@ class Usuario
 
     public function listarClientes()
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE nivel = 'cliente' ORDER BY nome ASC";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE nivel = 'cliente' AND ativo = 'sim' ORDER BY nome ASC";
 
         $ret = $this->conex->prepare($query);
         $ret->execute();
@@ -103,7 +103,7 @@ class Usuario
 
     public function excluirUsuario($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET ativo = 'nao' WHERE id = :id";
         $ret = $this->conex->prepare($query);
         $ret->bindParam(':id', $id);
 
@@ -190,5 +190,24 @@ class Usuario
             $this->conex->rollBack();
             return false;
         }
+    }
+
+    public function registrarLogAcesso($admin_id, $cliente_id)
+    {
+        $query = "INSERT INTO logs_acesso_dados (admin_id, cliente_id) VALUES (:admin_id, :cliente_id)";
+        $ret = $this->conex->prepare($query);
+        $ret->bindParam(':admin_id', $admin_id);
+        $ret->bindParam(':cliente_id', $cliente_id);
+        return $ret->execute();
+    }
+    public function buscarPorId($id)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+
+        $ret = $this->conex->prepare($query);
+        $ret->bindParam(':id', $id);
+        $ret->execute();
+
+        return $ret->fetch(PDO::FETCH_ASSOC);
     }
 }

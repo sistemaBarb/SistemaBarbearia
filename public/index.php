@@ -44,23 +44,22 @@ switch ($acao) {
 
     //sessão do barbeiro 
     case 'cadastrar_barbeiro':
-        require_once __DIR__ . '/../app/Controllers/BarbeirosController.php';
+        require_once __DIR__ . '/../app/Controllers/BarbeiroController.php';
         $barbeiro = new BarbeiroController();
         $barbeiro->cadastrar();
         break;
 
     case 'excluir_barbeiro':
-        require_once __DIR__ . '/../app/Controllers/BarbeirosController.php';
+        require_once __DIR__ . '/../app/Controllers/BarbeiroController.php';
         $barbeiro = new BarbeiroController();
         $barbeiro->excluir();
         break;
 
     case 'editar_barbeiro':
-        require_once __DIR__ . '/../app/Controllers/BarbeirosController.php';
+        require_once __DIR__ . '/../app/Controllers/BarbeiroController.php';
         $barbeiro = new BarbeiroController();
         $barbeiro->editar();
         break;
-
 
 
 
@@ -99,6 +98,21 @@ switch ($acao) {
         require_once __DIR__ . '/../app/Controllers/PagamentoController.php';
         $pagamento = new PagamentoController();
         $pagamento->gerarLinkPagamento();
+        break;
+
+
+    //visualiza dados sensiveis do cliente 
+    case 'visualizar_dados':
+        require_once __DIR__ . '/../app/Controllers/UsuarioController.php';
+        $usuario = new UsuarioController();
+        $usuario->visualizarDados();
+        break;
+
+    //visualiza dados sensiveis do barbeiro
+    case 'visualizar_dados_barbeiro':
+        require_once __DIR__ . '/../app/Controllers/BarbeiroController.php';
+        $barbeiro = new BarbeiroController();
+        $barbeiro->visualizarDados();
         break;
 
 

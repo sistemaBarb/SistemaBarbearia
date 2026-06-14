@@ -100,6 +100,7 @@ if ($nivel_usuario != 'administrador') {
                             echo "<td>{$telefone_tela}</td>"; // <-- Mudou aqui
                             echo "<td>";
                             echo "<a href='#' class='btn btn-warning btn-sm text-white' title='Editar' onclick='editar({$id}, \"{$nome}\", \"{$email}\", \"{$cpf}\", \"{$telefone}\")'>Editar</a>";
+                            echo "<a href='../../public/index.php?acao=visualizar_dados_barbeiro&id={$id}' class='btn btn-info btn-sm mx-1 text-white' title='Ver Dados Sensíveis'>Ver dados</a>";
                             echo "<a href='../../public/index.php?acao=excluir_barbeiro&id={$id}' class='btn btn-danger btn-sm text-white ml-2' title='Excluir' onclick=\"return confirm('Atenção: Deseja excluir o barbeiro {$nome}?');\">Excluir</a>";
                             echo "</td>";
                             echo "</tr>";
@@ -153,6 +154,13 @@ if ($nivel_usuario != 'administrador') {
                         <div class="form-group">
                             <label>Confirmar Senha</label>
                             <input type="password" name="confirma_senha" id="confirma_senha" class="form-control" required>
+                        </div>
+
+                        <div class="form-check mb-3 mt-2">
+                            <input type="checkbox" class="form-check-input" name="termo_lgpd" id="termo_lgpd" required>
+                            <label class="form-check-label text-muted" for="termo_lgpd" style="font-size: 0.9em; cursor: pointer;">
+                                Concordo com o armazenamento e tratamento dos meus dados pessoais por esta barbearia, em conformidade com a LGPD.
+                            </label>
                         </div>
 
                         <div textalign="center" id="mensagem-cadastro" class=""></div>

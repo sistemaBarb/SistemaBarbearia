@@ -111,4 +111,30 @@ class BarbeiroController
         }
         return true;
     }
+
+    public function visualizarDados()
+    {
+        if (isset($_GET['id'])) {
+            $barbeiro_id = $_GET['id'];
+
+            @session_start();
+            $admin_id = $_SESSION['id'];
+
+            $database = new Database();
+            $db = $database->getConnection();
+            $barbeiro = new Barbeiro($db);
+            $barbeiro->registrarLogAcesso($admin_id, $barbeiro_id);
+
+            $dadosBarbeiro = $barbeiro->buscarPorId($barbeiro_id);
+
+            $telefone = $dadosBarbeiro['telefone'];
+            $cpf = $dadosBarbeiro['cpf'];
+            $email = $dadosBarbeiro['email'];
+
+            echo "<script>
+                window.alert('DADOS SENSÍVEIS (Acesso Registrado no Log)\\n\\nTelefone: {$telefone}\\nCPF: {$cpf}\\nE-mail: {$email}\\n\\nEste acesso foi gravado.');
+                window.location='../sistema/painel/index.php?pag=barbeiros';
+            </script>";
+        }
+    }
 }
