@@ -99,7 +99,7 @@ if (isset($_GET['status']) && $_GET['status'] == 'approved' && isset($_GET['exte
               Editar
             </a>
 
-            <a href="../../../public/index.php?acao=excluir_agendamento&id=<?php echo $id; ?>" title="Excluir" class="btn btn-danger btn-sm" onclick="return confirm('Deseja realmente excluir este agendamento?');">
+            <a href="../../public/index.php?acao=excluir_agendamento&id=<?php echo $id; ?>" title="Excluir" class="btn btn-danger btn-sm" onclick="return confirm('Deseja realmente excluir este agendamento?');">
               Excluir
             </a>
 

@@ -1,4 +1,8 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 @session_start();
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo "<script>alert('Acesso negado'); window.location='index.php';</script>";
@@ -25,7 +29,7 @@ $db = $database->getConnection(); //conecta com o bd
 $agendamento = new Agendamento($db); //inicia a classe
 
 //recebe os dados do formulário do site
-$cliente = $_POST['nome_cliente'];
+$cliente = $_SESSION['id'];
 $funcionario = $_POST['funcionario'];
 $servicos = $_POST['servico'];
 $data = $_POST['data'];

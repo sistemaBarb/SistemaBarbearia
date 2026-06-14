@@ -10,10 +10,10 @@ class database
 
     public function __construct()
     {
-        $this->host = $_ENV['DB_HOST'];
-        $this->db_name = $_ENV['DB_NAME'];
-        $this->username = $_ENV['DB_USER'];
-        $this->password = $_ENV['DB_PASS'];
+        $this->host = $_SERVER['DB_HOST'];
+        $this->db_name = $_SERVER['DB_NAME'];
+        $this->username = $_SERVER['DB_USER'];
+        $this->password = $_SERVER['DB_PASS'];
     }
 
     public function getConnection()

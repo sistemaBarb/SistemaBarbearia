@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 @session_start();
 if (!isset($_SESSION['id']) || $_SESSION['id'] == "") { //id de quem está logado 
     echo "<script>window.location='sistema/index.php'</script>";
