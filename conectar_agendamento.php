@@ -14,7 +14,7 @@ if (!isset($_SESSION['id']) || $_SESSION['id'] == "") {
 
 // Conecta ao banco de dados logo que a página abre
 require_once 'config/database.php';
-// ... o resto do código (buscando serviços e barbeiros) continua igual
+// o resto do código (buscando serviços e barbeiros) continua igual
 require_once 'config/database.php';
 require_once 'app/Models/Agendamento.php'; //reaproveita a modal
 require_once 'sistema/painel/API_telegram.php'; //pega a  API

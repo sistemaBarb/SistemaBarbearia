@@ -20,43 +20,94 @@ if (@$_SESSION['nivel'] != 'administrador') {
                     <thead class="table-dark">
                         <tr>
                             <th>Nome</th>
-                            <th>email</th>
+                            <th>Email</th>
                             <th>CPF</th>
-                            <th class="text-center">situação</th>
+                            <th>Telefone</th>
+                            <th class="text-center">Situação</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
 
                     <body>
                         <?php
+                        function mascararCPF($cpf)
+                        {
+                            $cpfLimpo = preg_replace('/[^0-9]/', '', $cpf);
+                            if (strlen($cpfLimpo) != 11) return "***.***.***-**";
+                            return "***.***." . substr($cpfLimpo, 6, 3) . "-" . substr($cpfLimpo, 9, 2);
+                        }
+
+                        function mascararEmail($email)
+                        {
+                            $partes = explode('@', trim($email));
+                            if (count($partes) != 2) return $email;
+                            $usuario = $partes[0];
+                            $tamanho = strlen($usuario);
+                            if ($tamanho <= 2) {
+                                $usuarioMascarado = substr($usuario, 0, 1) . '***';
+                            } else {
+                                $usuarioMascarado = substr($usuario, 0, 2) . str_repeat('*', $tamanho - 2);
+                            }
+                            return $usuarioMascarado . '@' . $partes[1];
+                        }
+
+                        function mascararTelefone($telefone)
+                        {
+                            // Limpa tudo que não for número
+                            $telLimpo = preg_replace('/[^0-9]/', '', $telefone);
+                            $tamanho = strlen($telLimpo);
+
+                            // 1. Se o campo estiver vazio no banco de dados
+                            if ($tamanho == 0) {
+                                return "<span class='text-muted'>Não informado</span>";
+                            }
+                            $ultimosQuatroDigitos = substr($telLimpo, -4);
+                            if ($tamanho == 11) {
+                                // Formato Celular (11 dígitos): (11) 9****-6768
+                                return '(' . substr($telLimpo, 0, 2) . ') ' . substr($telLimpo, 2, 1) . '****-' .  $ultimosQuatroDigitos;
+                            } elseif ($tamanho > 4) {
+                                // Caso acontecça dele passar sem o DDD 
+                                return str_repeat('*', $tamanho - 4) . '-' . $ultimosQuatroDigitos;
+                            } else {
+
+                                return $telefone;
+                            }
+                        }
+
                         require_once __DIR__ . '/../../../../app/Controllers/UsuarioController.php';
                         $controller = new UsuarioController();
                         $res = $controller->listar();
                         if (count($res) > 0) {
                             foreach ($res as $row) {
                                 $nome = $row['nome'];
-                                $email = $row['email'];
-                                $cpf = $row['cpf'];
-                                $ativo = $row['ativo'];
+                                $email_real    = $row['email'];
+                                $cpf_real      = $row['cpf'];
+                                $telefone_real = $row['telefone']; // Puxa o telefone real
+                                $ativo         = $row['ativo'];
 
-                                // Badge do Bootstrap para o status ficar bonitinho
+
+                                $email_tela    = mascararEmail($row['email']);
+                                $cpf_tela      = mascararCPF($row['cpf']);
+                                $telefone_tela = mascararTelefone($row['telefone']);
+
+                                // Badge do Bootstrap
                                 $badge_status = ($ativo == 'sim')
                                     ? "<span class='badge bg-success'>Ativo</span>"
                                     : "<span class='badge bg-danger'>Inativo</span>";
 
                                 echo "
-                                <tr>
-                                <td><strong>{$nome}</strong></td>
-                                <td>{$email}</td>
-                                <td>{$cpf}</td>
-                                <td class='text-center'>{$badge_status}</td>
-                                <td class='text-center'>
-                                 <a href='#' class='btn btn-warning btn-sm mx-1 text-white' title='Editar' data-toggle='modal' data-target='#modalEditar' data-id='{$row['id']}' data-nome='{$nome}' data-email='{$email}' data-cpf='{$cpf}' data-ativo='{$ativo}' onclick='preencherModal(this)'>Editar</a>
-        
+                                  <tr>
+                                 <td><strong>{$nome}</strong></td>
+                                 <td>{$email_tela}</td>
+                                  <td>{$cpf_tela}</td>
+                                 <td>{$telefone_tela}</td> <td class='text-center'>{$badge_status}</td>
+                                  <td class='text-center'>
+                                  <a href='#' class='btn btn-warning btn-sm mx-1 text-white' title='Editar' data-toggle='modal' data-target='#modalEditar' data-id='{$row['id']}' data-nome='{$nome}' data-email='        {$email_real}' data-cpf='{$cpf_real}' data-telefone='{$telefone_real}' data-ativo='{$ativo}' onclick='preencherModal(this)'>Editar</a>
+
                                 <a href='../../public/index.php?acao=excluir&id={$row['id']}' class='btn btn-danger btn-sm mx-1 text-white' title='Excluir' onclick=\"return confirm('Atenção: Tem certeza que deseja excluir o cliente {$nome}? Esta ação não pode ser desfeita.');\">Excluir</a>
-                                </td>
-                                </tr>
-                                ";
+                                 </td>
+                                 </tr>
+                                 ";
                             }
                         } else {
 

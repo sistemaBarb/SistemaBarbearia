@@ -145,7 +145,7 @@ $barbeiros = $query_barb->fetchAll(PDO::FETCH_ASSOC);
 
                             <div class="col-md-6">
                                 <label class="form-label text-muted"><i class="fas fa-calendar-alt me-2"></i>Data</label>
-                                <input type="date" class="form-control" name="data" required>
+                                <input type="date" name="data" id="data" class="form-control" min="<?php echo date('Y-m-d'); ?>" required>
                             </div>
 
                             <div class="col-md-6">

@@ -24,7 +24,7 @@ if (isset($_GET['status']) && $_GET['status'] == 'approved' && isset($_GET['exte
 <div class="row">
   <div class="col-md-12">
     <button onclick="inserir()" type="button" class="btn btn-primary btn-flat btn-pri" data-toggle="modal" data-target="#modalForm">
-     Novo Agendamento
+      Novo Agendamento
     </button>
   </div>
 </div>
@@ -203,7 +203,7 @@ if (isset($_GET['status']) && $_GET['status'] == 'approved' && isset($_GET['exte
               <div class="col-md-6 form-group">
                 <label>data</label>
 
-                <input type="date" class="form-control" name="data" id="data" required>
+                <input type="date" name="data" id="data" class="form-control" min="<?php echo date('Y-m-d'); ?>" required>
               </div>
 
               <div class="col-md-6 form-group">

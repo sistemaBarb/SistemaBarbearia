@@ -36,7 +36,34 @@ if ($nivel_usuario != 'administrador') {
 
                 <body>
                     <?php
+                    function mascararCPF($cpf)
+                    {
+                        $cpfLimpo = preg_replace('/[^0-9]/', '', $cpf);
+                        if (strlen($cpfLimpo) != 11) return "***.***.***-**";
+                        return "***.***." . substr($cpfLimpo, 6, 3) . "-" . substr($cpfLimpo, 9, 2);
+                    }
 
+                    function mascararEmail($email)
+                    {
+                        $partes = explode('@', trim($email));
+                        if (count($partes) != 2) return $email;
+                        $usuario = $partes[0];
+                        $tamanho = strlen($usuario);
+                        if ($tamanho <= 2) {
+                            $usuarioMascarado = substr($usuario, 0, 1) . '***';
+                        } else {
+                            $usuarioMascarado = substr($usuario, 0, 2) . str_repeat('*', $tamanho - 2);
+                        }
+                        return $usuarioMascarado . '@' . $partes[1];
+                    }
+
+                    function mascararTelefone($telefone)
+                    {
+                        $telLimpo = preg_replace('/[^0-9]/', '', $telefone);
+                        if (strlen($telLimpo) == 11) return '(' . substr($telLimpo, 0, 2) . ') 9****-' . substr($telLimpo, 7, 4);
+                        if (strlen($telLimpo) == 10) return '(' . substr($telLimpo, 0, 2) . ') ****-' . substr($telLimpo, 6, 4);
+                        return "***********";
+                    }
 
 
                     // Chama o Controlador
@@ -56,12 +83,21 @@ if ($nivel_usuario != 'administrador') {
                             $cpf = $res[$i]['cpf'];
                             $telefone = $res[$i]['telefone'];
 
+                            //aqui vão ser os email reais apenas para usar no editar
+                            $email_real = $res[$i]['email'];
+                            $cpf_real = $res[$i]['cpf'];
+                            $telefone_real = $res[$i]['telefone'];
+
+                            //dados mascarados
+                            $email_tela = mascararEmail($res[$i]['email']);
+                            $cpf_tela = mascararCPF($res[$i]['cpf']);
+                            $telefone_tela = mascararTelefone($res[$i]['telefone']);
+
                             echo "<tr>";
                             echo "<td>{$nome}</td>";
-                            echo "<td>{$email}</td>";
-                            echo "<td>{$cpf}</td>";
-                            echo "<td>{$telefone}</td>";
-                            echo "<td>{$telefone}</td>";
+                            echo "<td>{$email_tela}</td>";    // <-- Mudou aqui
+                            echo "<td>{$cpf_tela}</td>";      // <-- Mudou aqui
+                            echo "<td>{$telefone_tela}</td>"; // <-- Mudou aqui
                             echo "<td>";
                             echo "<a href='#' class='btn btn-warning btn-sm text-white' title='Editar' onclick='editar({$id}, \"{$nome}\", \"{$email}\", \"{$cpf}\", \"{$telefone}\")'>Editar</a>";
                             echo "<a href='../../public/index.php?acao=excluir_barbeiro&id={$id}' class='btn btn-danger btn-sm text-white ml-2' title='Excluir' onclick=\"return confirm('Atenção: Deseja excluir o barbeiro {$nome}?');\">Excluir</a>";

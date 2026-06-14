@@ -22,6 +22,11 @@ class BarbeiroController
             $nome = $_POST['nome'];
             $email = $_POST['email'];
             $cpf = $_POST['cpf'];
+            // Chama a função para validar o CPF do barbeiro
+            if (!$this->validaCPF($cpf)) {
+                echo "<script>window.alert('O CPF do barbeiro é inválido! Verifique a digitação.'); window.history.back();</script>";
+                return;
+            }
             $telefone = $_POST['telefone'];
             $senha = $_POST['senha'];
             $confirma_senha = $_POST['confirma_senha'];
@@ -83,5 +88,27 @@ class BarbeiroController
                 echo "<script>window.alert('erro ao editar!'); window.location='../sistema/painel/index.php?pag=barbeiros';</script>";
             }
         }
+    }
+    private function validaCPF($cpf)
+    {
+        $cpf = preg_replace('/[^0-9]/is', '', $cpf);
+
+        if (strlen($cpf) != 11) {
+            return false;
+        }
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+            return false;
+        }
+
+        for ($i = 9; $i < 11; $i++) {
+            for ($d = 0, $c = 0; $c < $i; $c++) {
+                $d += $cpf[$c] * (($i + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
+                return false;
+            }
+        }
+        return true;
     }
 }

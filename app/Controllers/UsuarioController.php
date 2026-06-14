@@ -15,6 +15,10 @@ class UsuarioController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nome = $_POST['nome'];
             $cpf = $_POST['cpf'];
+            if (!$this->validaCPF($cpf)) {
+                echo "<script>window.alert('O CPF informado é inválido!'); window.history.back();</script>";
+                return;
+            }
             $email = $_POST['email'];
             $senha = $_POST['senha'];
             $confirma_senha = $_POST['confirma_senha'];
@@ -73,15 +77,21 @@ class UsuarioController
         }
     }
 
+
     public function excluir()
     {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
 
+            if ($id == 1) {
+                echo "<script>window.alert('o administrador principal não pode ser excluído'); window.location='../sistema/painel/index.php?pag=usuarios';</script>";
+                exit();
+            }
+            // --------------------------
+
             $database = new Database();
             $db = $database->getConnection();
             $usuarioDB = new Usuario($db);
-
 
             if ($usuarioDB->excluirUsuario($id)) {
                 echo "<script>window.alert('Excluído com sucesso!'); window.location='../sistema/painel/index.php?pag=usuarios';</script>";
@@ -92,8 +102,6 @@ class UsuarioController
             echo "<script>window.location='../sistema/painel/index.php?pag=usuarios';</script>";
         }
     }
-
-
 
 
 
@@ -183,5 +191,29 @@ class UsuarioController
                 echo "<script>window.alert('Link inválido'); window.location='../sistema/index.php';</script>";
             }
         }
+    }
+
+    private function validaCPF($cpf)
+    {
+
+        $cpf = preg_replace('/[^0-9]/is', '', $cpf); //pega os numeros do cpf
+        if (strlen($cpf) != 11) {    // Ve se tem 11 dígitos
+            return false;
+        }
+
+        if (preg_match('/(\d)\1{10}/', $cpf)) {  // Verifica se foi informada uma sequência de dígitos repetidos
+            return false;
+        }
+
+        for ($i = 9; $i < 11; $i++) { // Faz o cálculo para validar os dois últimos dígitos
+            for ($d = 0, $c = 0; $c < $i; $c++) {
+                $d += $cpf[$c] * (($i + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
+                return false;
+            }
+        }
+        return true;
     }
 }
