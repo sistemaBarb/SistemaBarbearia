@@ -450,12 +450,9 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
     <script>
         $('.sidebar-menu').SidebarNav()
     </script>
-    <!-- //side nav js -->
 
-
-    <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.js"> </script>
-    <!-- //Bootstrap Core JavaScript -->
+
 
     <div class="modal fade" id="modalPerfil" tabindex="-1" role="dialog" aria-labelledby="modalPerfilLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

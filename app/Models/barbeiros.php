@@ -76,9 +76,9 @@ class Barbeiro
     public function buscarPorId($id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
-        $stmt = $this->conex->prepare($query);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $ret = $this->conex->prepare($query);
+        $ret->bindParam(':id', $id);
+        $ret->execute();
+        return $ret->fetch(PDO::FETCH_ASSOC);
     }
 }

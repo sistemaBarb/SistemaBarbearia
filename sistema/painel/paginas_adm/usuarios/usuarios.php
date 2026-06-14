@@ -106,7 +106,7 @@ if (@$_SESSION['nivel'] != 'administrador') {
 
                                   <a href='../../public/index.php?acao=visualizar_dados&id={$row['id']}' class='btn btn-info btn-sm mx-1 text-white' title='ver Dados'> Ver Dados </a>
 
-                                <a href='../../public/index.php?acao=excluir&id={$row['id']}' class='btn btn-danger btn-sm mx-1 text-white' title='Excluir' onclick=\"return confirm('Atenção: Tem certeza que deseja excluir o cliente {$nome}? Esta ação não pode ser desfeita.');\">Excluir</a>
+                                <a href='../../public/index.php?acao=excluir&id={$row['id']}' class='btn btn-danger btn-sm mx-1 text-white' title='Excluir' onclick=\"return confirm('Tem certeza que deseja excluir o cliente {$nome}? Esta ação não pode ser desfeita.');\">Excluir</a>
                                  </td>
                                  </tr>
                                  ";

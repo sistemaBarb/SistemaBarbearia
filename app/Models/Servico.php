@@ -47,9 +47,9 @@ class Servico
     public function excluir($id)
     {
         $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
-        $stmt = $this->conex->prepare($query);
-        $stmt->bindParam(':id', $id);
+        $ret = $this->conex->prepare($query);
+        $ret->bindParam(':id', $id);
 
-        return $stmt->execute();
+        return $ret->execute();
     }
 }
